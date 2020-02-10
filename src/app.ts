@@ -28,7 +28,7 @@ app.use(koaBody({
 	}
 }));
 
-app.use(jwt({secret: JWT_AUTH_PASSWORD}).unless({path: [/^\/public/]}));
+//app.use(jwt({secret: JWT_AUTH_PASSWORD}).unless({path: [/^\/public/]}));
 app.use(verifyJwt({ignore: "public"}));
 app.use(casbinMiddleware());
 app.use(router.routes()).use(router.allowedMethods());

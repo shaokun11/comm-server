@@ -6,10 +6,10 @@ import {TokenExpireError} from "../middleware/responseCode";
 const cacheToken: { [index: string]: string; } = {};
 
 function verify(token: string) {
-	return new Promise((resolve, reject) => {
+	return new Promise<{ account: string }>((resolve, reject) => {
 		jwt.verify(token, JWT_AUTH_PASSWORD, function (err, decoded) {
 			if (err) reject(err);
-			resolve(decoded);
+			resolve(decoded as { account: string });
 		});
 	});
 }
@@ -19,14 +19,22 @@ class jwtAuth {
 		return async function f(ctx: Context, next: Function) {
 			const requestUrl = ctx.request.url;
 			if (option.ignore) {
-				let test = new RegExp(option.ignore);
-				if (test.test(requestUrl)) {
+				if (requestUrl.startsWith(option.ignore)) {
 					await next();
 					return;
 				}
 			}
 			const token = ctx.request.headers["authorization"].split(" ")[1];
-			const saveToken = cacheToken[ctx.state.user.account];
+			let account = "";
+
+			try {
+				let user = await verify(token);
+				account = user.account;
+			} catch (e) {
+				throw new TokenExpireError(e.message);
+			}
+			ctx.extra = {user: account};
+			const saveToken = cacheToken[account];
 			if (saveToken && saveToken !== token) {
 				throw new TokenExpireError();
 			}
@@ -37,11 +45,20 @@ class jwtAuth {
 	static async makeJwt({account}: { account: string }) {
 		let login_token = jwt.sign(
 			{account},
-			JWT_AUTH_PASSWORD, {expiresIn: "3d"}
+			JWT_AUTH_PASSWORD, {expiresIn: 1}
 		);
 		cacheToken[account] = login_token;
 		return login_token;
 	}
 }
+
+//jwtAuth.makeJwt({account: "shaokun"}).then(res => {
+//	console.log(res);
+//});
+//// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50Ijoic2hhb2t1biIsImlhdCI6MTU4MTM0NzE5MiwiZXhwIjoxNTgxMzQ3MTkzfQ.5cDzOgvjLE8kbXaqT9Jb90zNoDt6-23AW6uk-KCjJFQ
+//verify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50Ijoic2hhb2t1biIsImlhdCI6MTU4MTM0NzE5MiwiZXhwIjoxNTgxMzQ3MTkzfQ.5cDzOgvjLE8kbXaqT9Jb90zNoDt6-23AW6uk-KCjJFQ").then(res => {
+//	console.log(res);
+//}).catch(console.error);
+
 
 export default jwtAuth;
