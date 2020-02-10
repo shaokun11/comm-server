@@ -1,0 +1,13 @@
+g,root,withdrawAdmin
+g,root,mineAdmin
+g,withdrawAdmin,commAdmin
+g,mineAdmin,commAdmin
+
+g,nick,withdrawAdmin
+g,alice,mineAdmin
+g,tom,commAdmin
+g,jack,root
+
+p, withdrawAdmin, /withdraw/finish
+p, mineAdmin, /withdraw/unHandleList
+p, commAdmin, /withdraw/list
