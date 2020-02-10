@@ -23,6 +23,7 @@
     "casbin": "^3.0.8",
     "class-validator": "^0.11.0",
     "eosjs-ecc": "^4.0.7",
+    "fs-extra": "^8.1.0",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.11.0",
     "koa-body": "^4.1.1",

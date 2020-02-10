@@ -19,7 +19,15 @@ const app = new Koa();
 app.use(cors("*"));
 app.use(logger());
 app.use(responseMiddleware);
-app.use(koaBody());
+
+app.use(koaBody({
+	multipart: true,
+	formidable: {
+		multiples: true,
+		keepExtensions: true,
+	}
+}));
+
 app.use(jwt({secret: JWT_AUTH_PASSWORD}).unless({path: [/^\/public/]}));
 app.use(verifyJwt({ignore: "public"}));
 app.use(casbinMiddleware());
