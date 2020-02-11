@@ -33,7 +33,7 @@ class jwtAuth {
 			} catch (e) {
 				throw new TokenExpireError(e.message);
 			}
-			ctx.extra = {user: account};
+			ctx.state.user = account;
 			const saveToken = cacheToken[account];
 			if (saveToken && saveToken !== token) {
 				throw new TokenExpireError();

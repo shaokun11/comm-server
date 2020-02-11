@@ -1,7 +1,7 @@
-import {Context} from "koa";
-
-declare module "koa" {
-	interface Context {
-		extra: { user: string }
-	}
-}
+//import {Context} from "koa";
+//
+//declare module "koa" {
+//	interface Context {
+//		extra: { user: string }
+//	}
+//}

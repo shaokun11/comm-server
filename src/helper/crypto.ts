@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-// @ts-ignore
 import ecc from "eosjs-ecc";
 import bcrypt from 'bcrypt';
 
@@ -27,7 +26,7 @@ class CryptoHelpers {
 		return Buffer.from(ecc.Aes.decrypt(priKey, data.pubKey, data.nonce, Buffer.from(data.message), data.checksum)).toString("utf-8");
 	}
 
-	static async geneKeyPair() {
+	static async geneKeyPair(): Promise<string[]> {
 		const priKey = await ecc.randomKey();
 		const pubKey = ecc.privateToPublic(priKey);
 		return [priKey, pubKey];
@@ -61,4 +60,7 @@ class CryptoHelpers {
 
 //CryptoHelpers.hashPassword("hello world").then(console.log);
 //CryptoHelpers.vertifyPassword("hello world", '$2b$10$/X.pFhnFgJI8m31A.rwGGOSLLAKq6dfz9XinzveUKGW2kq2LbjctW').then(console.log);
+CryptoHelpers.geneKeyPair().then(res => {
+	console.log(res);
+});
 export default CryptoHelpers;

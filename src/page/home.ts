@@ -6,7 +6,8 @@ import requestValidator from "../helper/requestValidator";
 import Login from "../type/Login";
 
 const home = new Router();
-const login = async (ctx: Context) => {
+
+home.post("/login", async (ctx: Context) => {
 	await requestValidator(new Login(ctx.request.body));
 	const {user, password} = ctx.request.body;
 	pwdAuth(user, password);
@@ -14,7 +15,5 @@ const login = async (ctx: Context) => {
 	ctx.body = {
 		token: loginToken
 	};
-};
-
-home.post("/login", login);
+});
 export default home;
