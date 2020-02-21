@@ -12,7 +12,7 @@ home.post("/login", async ctx => {
 	pwdAuth(user, password);
 	let loginToken = await jwtAuth.makeJwt({account: user});
 	ctx.body = {
-		tokenError: loginToken
+		token: loginToken
 	};
 });
 export default home;
