@@ -1,11 +1,8 @@
-import './helper/logger';
-import koaBody from 'koa-body';
+import  koaBody from 'koa-body';
 import Koa from 'koa';
 import logger from 'koa-logger';
-import jwt from "koa-jwt";
 //@ts-ignore
 import cors from "@koa/cors";
-import {JWT_AUTH_PASSWORD} from "./const";
 import verifyJwt from "./middleware/verifyJwt";
 import responseMiddleware from "./middleware/response";
 import casbinMiddleware from "./middleware/casbin";
@@ -27,8 +24,6 @@ app.use(koaBody({
 		keepExtensions: true,
 	}
 }));
-
-//app.use(jwt({secret: JWT_AUTH_PASSWORD}).unless({path: [/^\/public/]}));
 app.use(verifyJwt({ignore: "public"}));
 app.use(casbinMiddleware());
 app.use(router.routes()).use(router.allowedMethods());

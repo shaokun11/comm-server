@@ -3,8 +3,8 @@ import requestValidator from "../helper/requestValidator";
 import ReceiveAppUpdate from "../type/ReceiveAppUpdate";
 import fs from 'fs';
 import path from 'path';
-import {ParamsError} from "../middleware/responseCode";
 import {File} from "formidable";
+import {ApiResponse} from "../error";
 
 const file = new Router();
 const saveFile = (filePath: string, name: string) => {
@@ -18,7 +18,7 @@ file.post("/", async ctx => {
 	await requestValidator(new ReceiveAppUpdate(body));
 	const files = ctx.request.files;
 	if (!files) {
-		throw new ParamsError("not found file to upload");
+		throw ApiResponse.params;
 	}
 	let file = files.file;
 	if (Array.isArray(file)) {

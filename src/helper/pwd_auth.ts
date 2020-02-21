@@ -1,13 +1,13 @@
 import dbUser from '../db/DBUser';
-import {PwdError, UserNotFoundError} from "../middleware/responseCode";
+import {ApiResponse} from "../error";
 
 const checkAccount = (user: string, password: string) => {
-	const users = [...dbUser.keys()];
-	if (!users.some(e => e === user)) {
-		throw new UserNotFoundError();
+	let obj = dbUser.get(user);
+	if (obj === undefined) {
+		throw ApiResponse.account;
 	}
-	if (dbUser.get(user).pwd !== password) {
-		throw new PwdError();
+	if (obj.pwd !== password) {
+		throw ApiResponse.account;
 	}
 };
 

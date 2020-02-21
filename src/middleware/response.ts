@@ -1,13 +1,12 @@
 import {Context} from "koa";
-import {ApiError, ResponseCode} from "./responseCode";
+import {ApiResponse} from "../error";
 
 async function responseMiddleware(ctx: Context, next: Function) {
 	try {
 		await next();
 		ctx.status = 200;
 		ctx.body = {
-			code: ResponseCode.Success,
-			message: "success",
+			...ApiResponse.success,
 			data: ctx.body || {}
 		};
 
@@ -15,19 +14,14 @@ async function responseMiddleware(ctx: Context, next: Function) {
 		ctx.status = 200;
 		let retMsg = {
 			code: -1,
-			message: "Server Error",
+			message: "unknow error",
 			data: {}
 		};
-		if (err.message.includes("You have an error in your SQL syntax")) {
-			retMsg.code = ResponseCode.SystemDbError;
-		} else if (401 === err.status) {
-			retMsg.code = ResponseCode.TokenInvalidError;
-			retMsg.message = err.message;
-		} else if (err instanceof ApiError) {
+		if (err.name === "apiError") {
 			retMsg.code = err.code;
 			retMsg.message = err.message;
 		} else {
-			retMsg.code = ResponseCode.SystemError;
+			retMsg.code = ApiResponse.system.code;
 		}
 		ctx.body = retMsg;
 	}

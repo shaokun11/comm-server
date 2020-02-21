@@ -6,11 +6,19 @@ export default class User {
 	id: number;
 
 	@Column()
-	name: string;
+	gl_auth_id: string;
 
 	@Column()
-	age: string;
+	gl_auth_token: string;
 
 	@Column()
-	salary: string;
+	account: string;
+	@Column()
+	nickname: string;
+	@Column()
+	code: string;
+	@Column()
+	parent: string;
+	@Column()
+	address: string;
 }

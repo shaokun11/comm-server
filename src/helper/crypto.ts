@@ -23,7 +23,11 @@ class CryptoHelpers {
 
 	static aesDecrypt(priKey: string, msg: string) {
 		let data = JSON.parse(msg);
-		return Buffer.from(ecc.Aes.decrypt(priKey, data.pubKey, data.nonce, Buffer.from(data.message), data.checksum)).toString("utf-8");
+		return Buffer.from(ecc.Aes.decrypt(priKey,
+			data.pubKey,
+			data.nonce,
+			Buffer.from(data.message),
+			data.checksum)).toString("utf-8");
 	}
 
 	static async geneKeyPair(): Promise<string[]> {

@@ -1,7 +1,7 @@
 import * as casbin from 'casbin';
 import path from 'path';
 import {Context} from 'koa';
-import {PermissionError} from "./responseCode";
+import {ApiResponse} from "../error";
 
 let enforcer: casbin.Enforcer;
 const modelPath = path.resolve("src/middleware/permission/model.conf");
@@ -12,12 +12,11 @@ void function initEnforce() {
 	});
 }();
 
-
 const verify = () => async (ctx: Context, next: Function) => {
 	if (enforcer.getAllObjects().includes(ctx.request.url)) {
 		if (!await enforcer.enforce(ctx.state.user.account, ctx.request.url)) {
 			ctx.status = 401;
-			throw new PermissionError("Permission deny");
+			throw ApiResponse.permission;
 		}
 	}
 	await next();

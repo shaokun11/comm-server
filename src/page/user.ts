@@ -4,10 +4,10 @@ import User from "../entity/User";
 
 const user = new Router();
 user.post("/", async ctx => {
-	const user = ctx.state.user;
+	const account = ctx.state.user;
 	ctx.body = await getRepository(User)
 		.createQueryBuilder("user")
-		.where('user.name = :name', {name: user.account})
+		.where('user.account = :account', {account})
 		.getOne();
 });
 export default user;
