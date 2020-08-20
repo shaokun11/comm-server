@@ -19,7 +19,7 @@
   "homepage": "https://github.com/shaokun11/cyber-backend#readme",
   "dependencies": {
     "@koa/cors": "^2.2.3",
-    "bcrypt": "^3.0.8",
+    "bcrypt": "^5.0.0",
     "casbin": "^3.0.8",
     "class-validator": "^0.11.0",
     "eosjs-ecc": "^4.0.7",
